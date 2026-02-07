@@ -1,7 +1,7 @@
 # RFM-Accounts-Segmentation-Analysis
 **Task:** Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis.
 
-  ###**0Stages of task completion:**
+  ##**Stages of task completion:**
 
 1. Write an SQL code to get a dataset for analysis that contains data:
    
