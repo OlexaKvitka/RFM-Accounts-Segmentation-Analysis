@@ -1,0 +1,243 @@
+
+RFM Analysis
+RFM Analysis_
+RFM Accounts Segmentation Analysis
+Structure
+Load data
+Calculate RFM metrics
+Create RFM scores (1-4)
+Segmentation (Top/Middle/Lost)
+Segment analysis
+Visualization
+Business Impact & Recommendations
+1. Load Data
+
+[ ]
+from google.colab import drive
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import  seaborn as sns
+
+
+[ ]
+from google.colab import drive
+drive.mount('/content/drive')
+results='/content/drive/MyDrive/RFM Analysis/RFM Analysis.csv'
+df=pd.read_csv(results)
+df
+
+2. Calculate RFM Metrics
+
+[ ]
+# Checking columns type
+print(df.info())
+
+# Converting date column
+df["last_visit_date"]= pd.to_datetime(df["last_visit_date"])
+
+# Research deadline day
+deadline = df["last_visit_date"].max()
+print(f"Deadline day is {deadline.date()}")
+
+# Recency: days since last visit
+df["recency"] = (deadline-df["last_visit_date"]).dt.days
+
+# Renaime column to obtain frequency and monetary
+df["frequency"]= df["visit_cnt"]
+df["monetary"]= df["revenue"]
+
+# Display RFM statistic
+print(f"RFM statistic: \n {df[['recency','frequency', 'monetary']].describe()}")
+
+3. Create RFM Scores (1-4)
+
+[ ]
+#Calculate "R","F","M" quartiles
+df["r"]= pd.qcut(df['recency'].rank(method='first'),q=4, labels=[4,3,2,1], duplicates='drop')
+df["f"]= pd.qcut(df['frequency'].rank(method='first'),q=4, labels=[1,2,3,4], duplicates='drop')
+df["m"]=pd.qcut(df['monetary'].rank(method='first'),q=4, labels=[1,2,3,4], duplicates='drop')
+
+#Combine RFM score
+df["rfm_score"]= df['r'].astype(str)+df['f'].astype(str)+df['m'].astype(str)
+
+# AVG RFM value
+df["rfm_value"]= df[['r','f','m']].mean(axis=1)
+
+print(df.describe())
+Core Performance Metrics Sum Up
+Recency (Days Since Last Email Open)
+
+Average: 55 days
+Range: 0-116 days
+Median: 55 days
+Frequency (Email Opens per Subscriber)
+
+Average: 4.6 opens
+Range: 1-65 opens
+Median: 3 opens
+Monetary Value (Revenue Attribution)
+
+Average: $325 per subscriber
+Range: $10-$2,040
+Median: $180
+4. Segmentation (Top/Middle/Lost)
+Segment customers into 3 groups based on average RFM value:
+- Top: rfm_value >= 3.0 (encourage and reward)
+- Middle: 2.0 <= rfm_value < 3.0 (keep engaging)
+- Lost: rfm_value < 2.0 (stop communication)
+
+[ ]
+# Define customer segments
+def segment (value):
+  if value>=3.0:
+    return "Top"
+  elif value>=2.0:
+    return "Middle"
+  else:
+    return "Lost"
+# Add segment labels
+df["segment"]=df["rfm_value"].apply(segment)
+print(f"Final table:\n", df.head())
+Final table:
+    account_id  visit_cnt last_visit_date  revenue  recency  frequency  \
+0      671969          4      2021-01-13      620       43          4   
+1      668655          3      2021-02-07       70       18          3   
+2      673773          5      2020-12-28      640       59          5   
+3      661850          1      2020-12-21      350       66          1   
+4      664958          1      2020-12-15       30       72          1   
+
+   monetary  r  f  m rfm_score  rfm_value segment  
+0       620  3  3  4       334   3.333333     Top  
+1        70  4  2  1       421   2.333333  Middle  
+2       640  2  3  4       234   3.000000     Top  
+3       350  2  1  3       213   2.000000  Middle  
+4        30  2  1  1       211   1.333333    Lost  
+5. Segment analysis
+
+[ ]
+# Display RFM segments distribution: aggregated and percentage
+print (f"Customer segment distribution:\n {df['segment'].value_counts()}\n")
+print (f"Customer segment distribution (%):\n {df['segment'].value_counts(normalize=True).mul(100).round(2)}")
+segment_stats=df.groupby("segment").agg({
+    'account_id':'count',
+    'recency':'mean',
+    'frequency':'mean',
+    'monetary': 'sum'
+}).round(2)
+print(f"Statistic by segment:\n",segment_stats )
+Customer segment distribution:
+ segment
+Middle    1900
+Top       1612
+Lost       951
+Name: count, dtype: int64
+
+Customer segment distribution (%):
+ segment
+Middle    42.57
+Top       36.12
+Lost      21.31
+Name: proportion, dtype: float64
+Statistic by segment:
+          account_id  recency  frequency  monetary
+segment                                          
+Lost            951    77.21       1.37     56970
+Middle         1900    56.37       2.91    478000
+Top            1612    39.08       8.58    916640
+Segment Analysis KEY Observations
+Analysis of 4,463 email subscribers reveals three distinct engagement tiers. The Top segment (36%) demonstrates strong engagement patterns, while a significant portion (21%) shows signs of disengagement requiring immediate intervention.
+
+Segment Distribution:
+Top: 1,612 subscribers (36.1%)
+Middle: 1,900 subscribers (42.6%)
+Lost: 951 subscribers (21.3%)
+Top Subscribers (36.1%)
+
+High-value segment contributing $916,640 in total revenue:
+
+Recency: 39 days (recently active)
+Frequency: 8.6 opens (highly engaged)
+Monetary: $569 average per subscriber
+Revenue contribution: 63% of total
+Middle Subscribers (42.6%)
+
+Moderate engagement with growth potential, contributing $478,000:
+
+Recency: 56 days (moderate activity)
+Frequency: 2.9 opens (occasional engagement)
+Monetary: $252 average per subscriber
+Revenue contribution: 33% of total
+Lost Subscribers (21.3%)
+
+At-risk segment showing minimal engagement, contributing $56,970:
+
+Recency: 77 days (inactive)
+Frequency: 1.4 opens (minimal engagement)
+Monetary: $60 average per subscriber
+Revenue contribution: 4% of total
+6. Visualization
+
+[ ]
+# Data type convertation (to evoid aggregation errors)
+df[['r','f','m']]=df[['r','f','m']].astype(float)
+
+# Desighn configuration
+colors=['orange', 'gold','grey']
+colors_r=['grey', 'gold','orange']
+order=['Top','Middle','Lost']
+
+#Layout setup: 2x2 grid of subplots
+fig,ax=plt.subplots(2,2,figsize=(10,10))
+
+# Donut chart
+df['segment'].value_counts().reindex(order).plot.pie(
+    ax=ax[0,0], autopct='%1.0f%%', colors=colors, wedgeprops={'width': 0.3}, startangle=90)
+ax[0,0].set_title('User Segment Distribution', fontweight='bold')
+ax[0,0].set_ylabel('')
+
+# Bar chart
+df.groupby('segment')['monetary'].sum().reindex(order).plot.bar(
+  ax=ax[0,1],color=colors, rot=0,width=0.8)
+ax[0,1].set_title('Revenue by Segmemnt,($)', fontweight='bold')
+
+# Heatmap
+rfm_means=df.groupby('segment')[['r','f','m']].mean().reindex(order).T
+sns.heatmap(rfm_means, annot=True, fmt='.2f',cmap=colors_r, ax=ax[1,0], cbar=False, linewidths=0.1, linecolor='white' )
+ax[1,0].set_title('Average RFM Scores', fontweight='bold')
+
+# Scatterplot
+sns.scatterplot(data=df, x='recency',y='frequency',hue='segment',
+                hue_order=order, palette=colors, ax=ax[1,1], alpha=0.6, legend=False)
+ax[1,1].set_title('Recency vs Frequency',fontweight='bold')
+plt.tight_layout()
+plt.show()
+
+7. Business Impact & Recommendations
+The subscriber base demonstrates strong engagement (79% active), with revenue heavily concentrated in the Top segment (63% from 36% of subscribers). Strategic focus should prioritize preventing Middle segment churn, maximizing Top segment value, and systematic Lost subscriber reactivation.
+
+Strategic Actions by Segment
+
+Top Segment (36%): Retention & Growth
+
+Launch VIP program with exclusive content and early product access
+Implement referral incentives to acquire similar high-value subscribers
+Deploy A/B testing on premium content formats
+Monitor engagement decay signals for early intervention
+Middle Segment (43%): Activation & Upgrade
+
+Deploy triggered email sequences based on behavior patterns
+Test personalized content and optimal send frequency
+Map conversion path from Middle to Top with milestone incentives
+Implement progressive profiling for enhanced targeting
+Lost Segment (21%): Reactivation & Hygiene
+
+Execute 3-5 email win-back series over 30 days
+Survey disengagement reasons and analyze drop-off patterns
+Implement sunset policy for 90+ day non-responders
+Prioritize recovery efforts by historical subscriber value
+The current subscriber base shows healthy engagement from 79% of the list, with significant revenue concentration in the Top segment. Strategic priorities should focus on preventing Middle segment churn, maximizing Top segment lifetime value, and implementing systematic reactivation efforts for Lost subscribers.
+
+Early intervention at the 60-day recency threshold presents the highest ROI opportunity for maintaining list health and revenue growth.
+
+Colab paid products - Cancel contracts here
