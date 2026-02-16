@@ -1,6 +1,6 @@
 # RFM-Accounts-Segmentation-Analysis
 
-**TASK**: Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis шin Google Colab
+**TASK**: Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis in Google Colab
 
 ## Deliverables  
 -  Google Colab Notebook: https://colab.research.google.com/drive/16QhFxl1e64_8TIzCXdUIBRPSZdDxS7Lo?usp=sharing#scrollTo=M3bUrqPoiFq6
@@ -10,14 +10,14 @@
 
 ## **Stages of task completion:**
 
-1. Write an SQL code to get a dataset for analysis that contains data:
+*1. Write an SQL code to get a dataset for analysis that contains data:*
    
 visit_cnt - unique number of emails opened by account;
 last_visit_date -  the date the letter was last opened;
 revenue - will assume that on average we should have received $10 from each open user email.
 
    To analyze were taken only account_id  there was one open letter and last_visit_date ≠ null. 
-2. Make a dictionary based on each RFM scale's particular meaning.
+*2. Make a dictionary based on each RFM scale's particular meaning.*
 
 It's also need to look at the current state of affairs and divide each indicator into segments:
 
@@ -28,7 +28,7 @@ It's also need to look at the current state of affairs and divide each indicator
 
 -How much money did we make from one user?
 
- ### **Google Colab Part Structure**
+ ## Google Colab Part Structure
  
 -Load data
 -Calculate RFM metrics
@@ -38,7 +38,7 @@ It's also need to look at the current state of affairs and divide each indicator
 -Visualization
 -Business Impact & Recommendations
 
-### **Segment Analysis KEY Observations**
+## Segment Analysis KEY Observations
 Analysis of 4,463 email subscribers reveals three distinct engagement tiers. The Top segment (36%) demonstrates strong engagement patterns, while a significant portion (21%) shows signs of disengagement requiring immediate intervention.
 
 *Segment Distribution:*
@@ -70,7 +70,7 @@ Frequency: 1.4 opens (minimal engagement)
 Monetary: $60 average per subscriber
 Revenue contribution: 4% of total
 
-### **Business Impact & Recommendations**
+## Business Impact & Recommendations
 The subscriber base demonstrates strong engagement (79% active), with revenue heavily concentrated in the Top segment (63% from 36% of subscribers). Strategic focus should prioritize preventing Middle segment churn, maximizing Top segment value, and systematic Lost subscriber reactivation.
 
 **Strategic Actions by Segment**
