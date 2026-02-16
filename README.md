@@ -2,6 +2,11 @@
 
 **Task** Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis шin Google Colab
 
+## Deliverables  
+-  Google Colab Notebook: https://colab.research.google.com/drive/16QhFxl1e64_8TIzCXdUIBRPSZdDxS7Lo?usp=sharing#scrollTo=M3bUrqPoiFq6
+ 
+## Google Colab Notebook Preview:
+![RFM Accounts Segmentation Analysis](RFM Accounts Segmentation Analysis.png)
 ### **Stages of task completion:**
 
 1. Write an SQL code to get a dataset for analysis that contains data:
@@ -70,6 +75,7 @@ The subscriber base demonstrates strong engagement (79% active), with revenue he
 **Strategic Actions by Segment**
 
 *Top Segment (36%): Retention & Growth*
+
 -Launch VIP program with exclusive content and early product access
 -Implement referral incentives to acquire similar high-value subscribers
 -Deploy A/B testing on premium content formats
@@ -83,6 +89,7 @@ The subscriber base demonstrates strong engagement (79% active), with revenue he
 -Implement progressive profiling for enhanced targeting
 
 **Lost Segment (21%): Reactivation & Hygiene**
+
 -Execute 3-5 email win-back series over 30 days
 -Survey disengagement reasons and analyze drop-off patterns
 -Implement sunset policy for 90+ day non-responders
