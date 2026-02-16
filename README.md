@@ -1,13 +1,14 @@
 # RFM-Accounts-Segmentation-Analysis
 
-**Task** Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis шin Google Colab
+**TASK**: Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis шin Google Colab
 
 ## Deliverables  
 -  Google Colab Notebook: https://colab.research.google.com/drive/16QhFxl1e64_8TIzCXdUIBRPSZdDxS7Lo?usp=sharing#scrollTo=M3bUrqPoiFq6
  
 ## Google Colab Notebook Preview:
-![RFM Accounts Segmentation Analysis](RFM Accounts Segmentation Analysis.png)
-### **Stages of task completion:**
+![RFM Accounts Segmentation Analysis](https://github.com/OlexaKvitka/RFM-Accounts-Segmentation-Analysis/blob/main/RFM%20Accounts%20Segmentation%20Analysis.PNG)
+
+## **Stages of task completion:**
 
 1. Write an SQL code to get a dataset for analysis that contains data:
    
