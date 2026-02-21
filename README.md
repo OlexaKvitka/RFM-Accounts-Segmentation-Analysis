@@ -3,7 +3,7 @@
 **TASK**: Divide subscribers from the database in Big Query into three segments (Lost, Top, Middle) using RFM analysis in Google Colab
 
 ## Deliverables  
--  Google Colab Notebook: https://colab.research.google.com/drive/16QhFxl1e64_8TIzCXdUIBRPSZdDxS7Lo?usp=sharing#scrollTo=M3bUrqPoiFq6
+-  [Google Colab Notebook:](https://colab.research.google.com/drive/16QhFxl1e64_8TIzCXdUIBRPSZdDxS7Lo?usp=sharing#scrollTo=M3bUrqPoiFq6)
  
 ## Google Colab Notebook Preview:
 ![RFM Accounts Segmentation Analysis](https://github.com/OlexaKvitka/RFM-Accounts-Segmentation-Analysis/blob/main/RFM%20Accounts%20Segmentation%20Analysis.PNG)
